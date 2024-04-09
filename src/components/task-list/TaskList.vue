@@ -1,9 +1,10 @@
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted } from "vue";
 import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-vue-next";
 
 import { Task } from "@/components/ui/task";
+import { allTasks } from "@/http/task-api";
 
 const data = reactive({
   tasks: [],
@@ -14,13 +15,25 @@ function add() {
 
   data.tasks.push({
     id: Date.now().toString(),
-    title: newTask.value,
+    name: newTask.value,
     date: new Date().toDateString(),
-    completed: false,
+    is_completed: false,
   });
 
   newTask.value = "";
 }
+
+onMounted(async () => {
+  const response = (await allTasks()).data.data;
+
+  data.tasks = response.map((task) => {
+    return {
+      ...task,
+      date: new Date(task.date).toDateString(),
+      id: task.id.toString(),
+    };
+  });
+});
 </script>
 
 <template>
