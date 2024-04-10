@@ -13,7 +13,7 @@ const props = defineProps({
       v-for="task in props.tasks"
       :key="task.id"
       :task="task"
-      @update="task.completed = !task.completed"
+      @updated="$emit('updated', $event)"
     />
 
     <p

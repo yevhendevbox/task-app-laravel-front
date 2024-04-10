@@ -1,39 +1,60 @@
 <script setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { Card, CardContent } from "@/components/ui/card";
-import { Pencil, Trash2 } from "lucide-vue-next";
-import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { TaskActions } from "@/components/task-actions";
 
 import { Checkbox } from "@/components/ui/checkbox";
 
-const emits = defineEmits(["update"]);
+const emits = defineEmits(["updated"]);
 
 const props = defineProps({
   task: { type: Object, required: true },
 });
+const editName = ref(props.task.name);
+const isEdit = ref(false);
+
+function edit() {
+  if (editName.value === props.task.name) return;
+  const updatedTask = {
+    ...props.task,
+    name: editName.value,
+  };
+
+  emits("updated", updatedTask);
+  isEdit.value = false;
+}
 
 const isCompleted = computed(() => props.task.is_completed);
+const vFocus = {
+  mounted: (el) => el.focus(),
+};
 </script>
 <template>
   <Card class="w-full mb-2">
     <CardContent class="flex items-center gap-4 p-4">
       <Checkbox :id="props.task.id" v-model:checked="props.task.is_completed" />
+
+      <Input
+        v-model="editName"
+        v-if="isEdit"
+        v-focus
+        class="w-full"
+        @keyup.enter="edit"
+        @keyup.escape="isEdit = false"
+      />
       <label
+        v-else
         :for="props.task.id"
         class="cursor-pointer"
         :class="{ 'line-through': isCompleted }"
         >{{ props.task.name }}</label
       >
+
       <div class="flex ml-auto items-center gap-4">
         <div>{{ props.task.date }}</div>
-        <div class="flex gap-2">
-          <Button variant="outline" size="icon">
-            <Pencil class="w-4 h-4" />
-          </Button>
-          <Button variant="destructive" size="icon">
-            <Trash2 class="w-4 h-4" />
-          </Button>
-        </div>
+
+        <TaskActions v-if="!isEdit" @edit="isEdit = true" />
       </div>
     </CardContent>
   </Card>

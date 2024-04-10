@@ -1,6 +1,6 @@
 <script setup>
 import { reactive, ref, computed } from "vue";
-import { allTasks, createTask } from "@/http/task-api";
+import { allTasks, createTask, updateTask } from "@/http/task-api";
 
 import { TaskList } from "@/components/task-list";
 import { Button } from "@/components/ui/button";
@@ -49,6 +49,13 @@ async function add(task) {
   data.tasks.unshift(newTask);
 }
 
+async function update(task) {
+  const response = (await updateTask(task.id, { name: task.name })).data.data;
+
+  const currentTask = data.tasks.find((t) => t.id === response.id.toString());
+  currentTask.name = response.name;
+}
+
 init();
 </script>
 
@@ -56,7 +63,7 @@ init();
   <main class="container mx-auto py-[4rem]">
     <AddTask @added="add" />
 
-    <TaskList :tasks="uncompletedTasks" />
+    <TaskList :tasks="uncompletedTasks" @updated="update" />
 
     <div class="text-center my-3" v-show="showToggleBtn">
       <Button @click="showCompleted = !showCompleted">
