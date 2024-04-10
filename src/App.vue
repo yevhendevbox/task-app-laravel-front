@@ -1,12 +1,12 @@
 <script setup>
 import { Navbar } from "@/components/ui/navbar";
-import { TaskList } from "@/components/task-list";
+import { TasksPage } from "@/pages/tasks-page";
 </script>
 
 <template>
   <Navbar />
 
-  <TaskList />
+  <TasksPage />
 </template>
 
 <style scoped></style>
