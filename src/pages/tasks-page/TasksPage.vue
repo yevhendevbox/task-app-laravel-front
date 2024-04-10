@@ -1,6 +1,6 @@
 <script setup>
 import { reactive, ref, computed } from "vue";
-import { allTasks } from "@/http/task-api";
+import { allTasks, createTask } from "@/http/task-api";
 
 import { TaskList } from "@/components/task-list";
 import { Button } from "@/components/ui/button";
@@ -37,8 +37,16 @@ async function init() {
     };
   });
 }
-function add(task) {
-  data.tasks.push(task);
+async function add(task) {
+  const response = (await createTask(task)).data.data;
+
+  const newTask = {
+    ...response,
+    date: new Date(response.date).toDateString(),
+    id: response.id.toString(),
+  };
+
+  data.tasks.unshift(newTask);
 }
 
 init();
@@ -46,7 +54,7 @@ init();
 
 <template>
   <main class="container mx-auto py-[4rem]">
-    <AddTask @create="add" />
+    <AddTask @added="add" />
 
     <TaskList :tasks="uncompletedTasks" />
 

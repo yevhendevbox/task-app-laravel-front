@@ -1,27 +1,18 @@
 <script setup>
-import { ref } from "vue";
 import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-vue-next";
-import { createTask } from "@/http/task-api";
 
-const emits = defineEmits(["create"]);
+const emits = defineEmits(["added"]);
 
-const newName = ref("");
-async function add() {
-  if (!newName.value) return;
+async function add($event) {
+  if (!$event.target.value) return;
 
   const payload = {
-    name: newName.value,
+    name: $event.target.value.trim(),
   };
+  $event.target.value = "";
 
-  const response = (await createTask(payload)).data.data;
-  const newTask = {
-    ...response,
-    date: new Date(response.date).toDateString(),
-    id: response.id.toString(),
-  };
-  emits("create", newTask);
-  newName.value = "";
+  emits("added", payload);
 }
 </script>
 
@@ -32,7 +23,6 @@ async function add() {
       type="text"
       placeholder="Add new task. Please enter to save"
       class="pl-10"
-      v-model="newName"
       @keyup.enter="add"
     />
     <span
