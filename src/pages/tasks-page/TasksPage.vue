@@ -1,6 +1,12 @@
 <script setup>
 import { reactive, ref, computed } from "vue";
-import { allTasks, createTask, updateTask } from "@/http/task-api";
+import {
+  allTasks,
+  createTask,
+  updateTask,
+  completeTask,
+  deleteTask,
+} from "@/http/task-api";
 
 import { TaskList } from "@/components/task-list";
 import { Button } from "@/components/ui/button";
@@ -56,6 +62,20 @@ async function update(task) {
   taskToUpdate.name = response.name;
 }
 
+async function toggleComplition(task) {
+  const response = (
+    await completeTask(task.id, { is_completed: task.is_completed })
+  ).data.data;
+  const taskToUpdate = data.tasks.find((t) => t.id === response.id.toString());
+  taskToUpdate.is_completed = response.is_completed;
+}
+
+async function handleRemove(task) {
+  await deleteTask(task.id);
+  const index = data.tasks.findIndex((t) => t.id === task.id);
+  data.tasks.splice(index, 1);
+}
+
 init();
 </script>
 
@@ -63,7 +83,12 @@ init();
   <main class="container mx-auto py-[4rem]">
     <AddTask @added="add" />
 
-    <TaskList :tasks="uncompletedTasks" @updated="update" />
+    <TaskList
+      :tasks="uncompletedTasks"
+      @updated="update"
+      @toggle="toggleComplition"
+      @remove="handleRemove"
+    />
 
     <div class="text-center my-3" v-show="showToggleBtn">
       <Button @click="showCompleted = !showCompleted">
@@ -75,6 +100,9 @@ init();
     <TaskList
       :tasks="completedTasks"
       :show="isCompletedVisible && showCompleted"
+      @updated="update"
+      @toggle="toggleComplition"
+      @remove="handleRemove"
     />
   </main>
 </template>

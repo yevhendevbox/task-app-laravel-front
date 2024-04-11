@@ -14,6 +14,8 @@ const props = defineProps({
       :key="task.id"
       :task="task"
       @updated="$emit('updated', $event)"
+      @toggle="$emit('toggle', $event)"
+      @remove="$emit('remove', $event)"
     />
 
     <p
