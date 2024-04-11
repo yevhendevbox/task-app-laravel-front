@@ -25,6 +25,11 @@ function edit() {
   isEdit.value = false;
 }
 
+function undo() {
+  editName.value = props.task.name;
+  isEdit.value = false;
+}
+
 const isCompleted = computed(() => props.task.is_completed);
 const vFocus = {
   mounted: (el) => el.focus(),
@@ -41,7 +46,7 @@ const vFocus = {
         v-focus
         class="w-full"
         @keyup.enter="edit"
-        @keyup.escape="isEdit = false"
+        @keyup.escape="undo"
       />
       <label
         v-else

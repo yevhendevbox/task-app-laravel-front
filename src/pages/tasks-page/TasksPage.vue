@@ -52,8 +52,8 @@ async function add(task) {
 async function update(task) {
   const response = (await updateTask(task.id, { name: task.name })).data.data;
 
-  const currentTask = data.tasks.find((t) => t.id === response.id.toString());
-  currentTask.name = response.name;
+  const taskToUpdate = data.tasks.find((t) => t.id === response.id.toString());
+  taskToUpdate.name = response.name;
 }
 
 init();
