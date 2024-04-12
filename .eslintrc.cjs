@@ -18,6 +18,14 @@ module.exports = {
     'vue/component-name-in-template-casing': [ 'error', 'PascalCase' ],
     'vue/require-prop-types': 'off',
     'vue/require-default-prop': 'off',
-    'no-useless-escape': 'off'
+    'no-useless-escape': 'off',
+    'no-unused-vars': [
+      'warn',
+      {
+        vars: 'all',
+        args: "after-used",
+        caughtErrors: "all",
+      }
+    ],
   }
 }

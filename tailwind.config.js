@@ -1,18 +1,20 @@
+// eslint-disable-next-line
 const animate = require("tailwindcss-animate")
 
 /** @type {import('tailwindcss').Config} */
+// eslint-disable-next-line
 module.exports = {
   darkMode: ["class"],
   safelist: ["dark"],
   prefix: "",
-  
+
   content: [
     './pages/**/*.{js,jsx,vue}',
     './components/**/*.{js,jsx,vue}',
     './app/**/*.{js,jsx,vue}',
     './src/**/*.{js,jsx,vue}',
 	],
-  
+
   theme: {
     container: {
       center: true,
