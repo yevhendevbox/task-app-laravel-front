@@ -1,1 +1,1 @@
-export { default as TasksPage } from "./TasksPage.vue";
+export { default as TasksPage } from './TasksPage.vue';

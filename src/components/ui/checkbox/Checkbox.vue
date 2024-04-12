@@ -1,12 +1,9 @@
 <script setup>
-import { computed } from "vue";
-import {
-  CheckboxIndicator,
-  CheckboxRoot,
-  useForwardPropsEmits,
-} from "radix-vue";
-import { Check } from "lucide-vue-next";
-import { cn } from "@/lib/utils";
+import { Check } from 'lucide-vue-next';
+import { CheckboxIndicator, CheckboxRoot, useForwardPropsEmits } from 'radix-vue';
+import { computed } from 'vue';
+
+import { cn } from '@/lib/utils';
 
 const props = defineProps({
   defaultChecked: { type: Boolean, required: false },
@@ -18,9 +15,9 @@ const props = defineProps({
   id: { type: String, required: false },
   asChild: { type: Boolean, required: false },
   as: { type: null, required: false },
-  class: { type: null, required: false },
+  class: { type: null, required: false }
 });
-const emits = defineEmits(["update:checked"]);
+const emits = defineEmits(['update:checked']);
 
 const delegatedProps = computed(() => {
   const { class: _, ...delegated } = props;
@@ -41,9 +38,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
       )
     "
   >
-    <CheckboxIndicator
-      class="flex h-full w-full items-center justify-center text-current"
-    >
+    <CheckboxIndicator class="flex h-full w-full items-center justify-center text-current">
       <slot>
         <Check class="h-4 w-4" />
       </slot>

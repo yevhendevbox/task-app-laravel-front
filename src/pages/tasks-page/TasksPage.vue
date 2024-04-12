@@ -1,13 +1,13 @@
 <script setup>
-import { reactive, ref, computed } from "vue";
-import { allTasks, createTask, updateTask } from "@/http/task-api";
+import { computed, reactive, ref } from 'vue';
 
-import { TaskList } from "@/components/task-list";
-import { Button } from "@/components/ui/button";
-import { AddTask } from "@/components/add-task";
+import { AddTask } from '@/components/add-task';
+import { TaskList } from '@/components/task-list';
+import { Button } from '@/components/ui/button';
+import { allTasks, completeTask, createTask, deleteTask, updateTask } from '@/http/task-api';
 
 const data = reactive({
-  tasks: [],
+  tasks: []
 });
 
 const completedTasks = computed(() => {
@@ -17,13 +17,9 @@ const completedTasks = computed(() => {
 const uncompletedTasks = computed(() => {
   return data.tasks.filter((task) => !task.is_completed);
 });
-const showToggleBtn = computed(
-  () => uncompletedTasks.value.length && completedTasks.value.length
-);
+const showToggleBtn = computed(() => uncompletedTasks.value.length && completedTasks.value.length);
 
-const isCompletedVisible = computed(
-  () => uncompletedTasks.value.length === 0 || completedTasks.value.length > 0
-);
+const isCompletedVisible = computed(() => uncompletedTasks.value.length === 0 || completedTasks.value.length > 0);
 const showCompleted = ref(false);
 
 async function init() {
@@ -33,7 +29,7 @@ async function init() {
     return {
       ...task,
       date: new Date(task.date).toDateString(),
-      id: task.id.toString(),
+      id: task.id.toString()
     };
   });
 }
@@ -43,7 +39,7 @@ async function add(task) {
   const newTask = {
     ...response,
     date: new Date(response.date).toDateString(),
-    id: response.id.toString(),
+    id: response.id.toString()
   };
 
   data.tasks.unshift(newTask);
@@ -56,6 +52,18 @@ async function update(task) {
   taskToUpdate.name = response.name;
 }
 
+async function toggleComplition(task) {
+  const response = (await completeTask(task.id, { is_completed: task.is_completed })).data.data;
+  const taskToUpdate = data.tasks.find((t) => t.id === response.id.toString());
+  taskToUpdate.is_completed = response.is_completed;
+}
+
+async function handleRemove(task) {
+  await deleteTask(task.id);
+  const index = data.tasks.findIndex((t) => t.id === task.id);
+  data.tasks.splice(index, 1);
+}
+
 init();
 </script>
 
@@ -63,9 +71,9 @@ init();
   <main class="container mx-auto py-[4rem]">
     <AddTask @added="add" />
 
-    <TaskList :tasks="uncompletedTasks" @updated="update" />
+    <TaskList @updated="update" @toggle="toggleComplition" @remove="handleRemove" :tasks="uncompletedTasks" />
 
-    <div class="text-center my-3" v-show="showToggleBtn">
+    <div v-show="showToggleBtn" class="my-3 text-center">
       <Button @click="showCompleted = !showCompleted">
         <span v-if="!showCompleted">Show completed</span>
         <span v-else>Hide completed</span>
@@ -73,6 +81,9 @@ init();
     </div>
 
     <TaskList
+      @updated="update"
+      @toggle="toggleComplition"
+      @remove="handleRemove"
       :tasks="completedTasks"
       :show="isCompletedVisible && showCompleted"
     />

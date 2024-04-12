@@ -1,8 +1,10 @@
 <script setup>
-import { computed } from "vue";
-import { NavigationMenuRoot, useForwardPropsEmits } from "radix-vue";
-import NavigationMenuViewport from "./NavigationMenuViewport.vue";
-import { cn } from "@/lib/utils";
+import { NavigationMenuRoot, useForwardPropsEmits } from 'radix-vue';
+import { computed } from 'vue';
+
+import { cn } from '@/lib/utils';
+
+import NavigationMenuViewport from './NavigationMenuViewport.vue';
 
 const props = defineProps({
   modelValue: { type: String, required: false },
@@ -15,10 +17,10 @@ const props = defineProps({
   disableHoverTrigger: { type: Boolean, required: false },
   asChild: { type: Boolean, required: false },
   as: { type: null, required: false },
-  class: { type: null, required: false },
+  class: { type: null, required: false }
 });
 
-const emits = defineEmits(["update:modelValue"]);
+const emits = defineEmits(['update:modelValue']);
 
 const delegatedProps = computed(() => {
   const { class: _, ...delegated } = props;
@@ -32,12 +34,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
 <template>
   <NavigationMenuRoot
     v-bind="forwarded"
-    :class="
-      cn(
-        'relative z-10 flex max-w-max flex-1 items-center justify-center',
-        props.class
-      )
-    "
+    :class="cn('relative z-10 flex max-w-max flex-1 items-center justify-center', props.class)"
   >
     <slot />
     <NavigationMenuViewport />
