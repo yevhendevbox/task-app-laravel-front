@@ -2,8 +2,10 @@
 import { Plus } from 'lucide-vue-next';
 
 import { Input } from '@/components/ui/input';
+import { useTaskStore } from '@/stores/taskStore';
 
-const emits = defineEmits(['added']);
+const store = useTaskStore();
+const { create } = store;
 
 async function add($event) {
   if (!$event.target.value) return;
@@ -13,7 +15,7 @@ async function add($event) {
   };
   $event.target.value = '';
 
-  emits('added', payload);
+  await create(payload);
 }
 </script>
 

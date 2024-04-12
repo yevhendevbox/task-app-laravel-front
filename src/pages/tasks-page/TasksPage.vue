@@ -1,67 +1,23 @@
 <script setup>
-import { computed, reactive, ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { computed, ref } from 'vue';
 
 import { AddTask } from '@/components/add-task';
 import { TaskList } from '@/components/task-list';
 import { Button } from '@/components/ui/button';
-import { allTasks, completeTask, createTask, deleteTask, updateTask } from '@/http/task-api';
+import { useTaskStore } from '@/stores/taskStore';
 
-const data = reactive({
-  tasks: []
-});
+const store = useTaskStore();
+const { fetchAll, update, remove, toggle } = store;
+const { completed, uncompleted } = storeToRefs(store);
 
-const completedTasks = computed(() => {
-  return data.tasks.filter((task) => task.is_completed);
-});
+const showToggleBtn = computed(() => uncompleted.value.length && completed.value.length);
 
-const uncompletedTasks = computed(() => {
-  return data.tasks.filter((task) => !task.is_completed);
-});
-const showToggleBtn = computed(() => uncompletedTasks.value.length && completedTasks.value.length);
-
-const isCompletedVisible = computed(() => uncompletedTasks.value.length === 0 || completedTasks.value.length > 0);
+const isCompletedVisible = computed(() => uncompleted.value.length === 0 || completed.value.length > 0);
 const showCompleted = ref(false);
 
 async function init() {
-  const response = (await allTasks()).data.data;
-
-  data.tasks = response.map((task) => {
-    return {
-      ...task,
-      date: new Date(task.date).toDateString(),
-      id: task.id.toString()
-    };
-  });
-}
-async function add(task) {
-  const response = (await createTask(task)).data.data;
-
-  const newTask = {
-    ...response,
-    date: new Date(response.date).toDateString(),
-    id: response.id.toString()
-  };
-
-  data.tasks.unshift(newTask);
-}
-
-async function update(task) {
-  const response = (await updateTask(task.id, { name: task.name })).data.data;
-
-  const taskToUpdate = data.tasks.find((t) => t.id === response.id.toString());
-  taskToUpdate.name = response.name;
-}
-
-async function toggleComplition(task) {
-  const response = (await completeTask(task.id, { is_completed: task.is_completed })).data.data;
-  const taskToUpdate = data.tasks.find((t) => t.id === response.id.toString());
-  taskToUpdate.is_completed = response.is_completed;
-}
-
-async function handleRemove(task) {
-  await deleteTask(task.id);
-  const index = data.tasks.findIndex((t) => t.id === task.id);
-  data.tasks.splice(index, 1);
+  await fetchAll();
 }
 
 init();
@@ -69,9 +25,9 @@ init();
 
 <template>
   <main class="container mx-auto py-[4rem]">
-    <AddTask @added="add" />
+    <AddTask />
 
-    <TaskList @updated="update" @toggle="toggleComplition" @remove="handleRemove" :tasks="uncompletedTasks" />
+    <TaskList @updated="update" @toggle="toggle" @remove="remove" :tasks="uncompleted" />
 
     <div v-show="showToggleBtn" class="my-3 text-center">
       <Button @click="showCompleted = !showCompleted">
@@ -82,9 +38,9 @@ init();
 
     <TaskList
       @updated="update"
-      @toggle="toggleComplition"
-      @remove="handleRemove"
-      :tasks="completedTasks"
+      @toggle="toggle"
+      @remove="remove"
+      :tasks="completed"
       :show="isCompletedVisible && showCompleted"
     />
   </main>
