@@ -1,33 +1,26 @@
 <script setup>
-import { Input } from "@/components/ui/input";
-import { Plus } from "lucide-vue-next";
+import { Plus } from 'lucide-vue-next';
 
-const emits = defineEmits(["added"]);
+import { Input } from '@/components/ui/input';
+
+const emits = defineEmits(['added']);
 
 async function add($event) {
   if (!$event.target.value) return;
 
   const payload = {
-    name: $event.target.value.trim(),
+    name: $event.target.value.trim()
   };
-  $event.target.value = "";
+  $event.target.value = '';
 
-  emits("added", payload);
+  emits('added', payload);
 }
 </script>
 
 <template>
   <div class="relative w-full max-w-sm items-center">
-    <Input
-      id="add"
-      type="text"
-      placeholder="Add new task. Please enter to save"
-      class="pl-10"
-      @keyup.enter="add"
-    />
-    <span
-      class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
-    >
+    <Input @keyup.enter="add" id="add" type="text" placeholder="Add new task. Please enter to save" class="pl-10" />
+    <span class="absolute inset-y-0 start-0 flex items-center justify-center px-2">
       <Plus class="size-6 text-muted-foreground" />
     </span>
   </div>

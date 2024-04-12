@@ -1,17 +1,13 @@
 <script setup>
-import {
-  NavigationMenu,
-  NavigationMenuLink,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu";
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
+import { NavigationMenu, NavigationMenuLink, NavigationMenuList } from '@/components/ui/navigation-menu';
 </script>
 
 <template>
-  <NavigationMenu class="bg-zinc-900 min-w-full">
+  <NavigationMenu class="min-w-full bg-zinc-900">
     <div class="container py-[1rem]">
       <NavigationMenuList class="flex justify-between">
-        <div class="flex gap-6 items-center">
+        <div class="flex items-center gap-6">
           <NavigationMenuLink class="text-xl">Todo List App</NavigationMenuLink>
           <NavigationMenuLink>Tasks</NavigationMenuLink>
           <NavigationMenuLink>Summary</NavigationMenuLink>
