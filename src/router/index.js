@@ -7,4 +7,10 @@ const router = createRouter({
   history: createWebHistory()
 });
 
+router.beforeEach((to, from) => {
+  if (to.path === '/tasks') {
+    return { name: 'login' };
+  }
+});
+
 export default router;
