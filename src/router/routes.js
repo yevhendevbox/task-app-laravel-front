@@ -1,3 +1,4 @@
+import { NotFoundPage } from '@/pages/error-page';
 import { HomePage } from '@/pages/home-page';
 import { LoginPage } from '@/pages/login-page';
 import { RegisterPage } from '@/pages/register-page';
@@ -29,6 +30,11 @@ const routes = [
     path: '/tasks',
     name: 'tasks',
     component: TasksPage
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'error.404',
+    component: NotFoundPage
   }
 ];
 

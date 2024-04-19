@@ -73,6 +73,10 @@
     @apply border-border;
   }
   body {
-    @apply dark bg-background text-foreground;
+    @apply dark min-h-full bg-background text-foreground;
   }
+}
+
+.router-link-active {
+  @apply text-slate-400;
 }

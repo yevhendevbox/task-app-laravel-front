@@ -8,14 +8,14 @@ import { NavigationMenu, NavigationMenuLink, NavigationMenuList } from '@/compon
     <div class="container py-[1rem]">
       <NavigationMenuList class="flex justify-between">
         <div class="flex items-center gap-6">
-          <NavigationMenuLink @click="$router.push({ name: 'home' })" class="cursor-pointer text-xl">
-            Todo List App
+          <NavigationMenuLink class="cursor-pointer text-xl">
+            <RouterLink :to="{ name: 'home' }">Todo List App</RouterLink>
           </NavigationMenuLink>
-          <NavigationMenuLink @click="$router.push({ name: 'tasks' })" class="cursor-pointer">
-            Tasks
+          <NavigationMenuLink class="cursor-pointer">
+            <RouterLink :to="{ name: 'tasks' }">Tasks</RouterLink>
           </NavigationMenuLink>
-          <NavigationMenuLink @click="$router.push({ name: 'summary' })" class="cursor-pointer">
-            Summary
+          <NavigationMenuLink class="cursor-pointer">
+            <RouterLink :to="{ name: 'summary' }">Summary</RouterLink>
           </NavigationMenuLink>
         </div>
 
