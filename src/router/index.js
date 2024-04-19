@@ -8,9 +8,9 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from) => {
-  if (to.path === '/tasks') {
-    return { name: 'login' };
-  }
+  // if (to.path === '/tasks') {
+  //   return { name: 'login' };
+  // }
 });
 
 export default router;
