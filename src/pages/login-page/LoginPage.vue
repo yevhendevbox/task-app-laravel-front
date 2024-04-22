@@ -1,7 +1,23 @@
 <script setup>
+import { reactive } from 'vue';
+import { useRouter } from 'vue-router';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { useAuthStore } from '@/stores/auth';
+
+const store = useAuthStore();
+const router = useRouter();
+const form = reactive({
+  email: '',
+  password: ''
+});
+
+async function handleSignIn() {
+  await store.handleLogin(form);
+  router.push({ name: 'tasks' });
+}
 </script>
 
 <template>
@@ -12,10 +28,10 @@ import { Input } from '@/components/ui/input';
         <p class="text-center">Please sign in</p>
       </CardHeader>
       <CardContent class="flex flex-col gap-2">
-        <Input placeholder="Please enter your email" />
-        <Input placeholder="Please enter your password" type="password" />
+        <Input placeholder="Please enter your email" v-model="form.email" />
+        <Input placeholder="Please enter your password" type="password" v-model="form.password" />
 
-        <Button class="mt-4">Sign in</Button>
+        <Button @click="handleSignIn" class="mt-4">Sign in</Button>
       </CardContent>
     </Card>
   </div>
