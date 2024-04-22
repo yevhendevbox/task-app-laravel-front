@@ -24,12 +24,18 @@ const routes = [
   {
     path: '/summary',
     name: 'summary',
-    component: SummaryPage
+    component: SummaryPage,
+    meta: {
+      auth: true
+    }
   },
   {
     path: '/tasks',
     name: 'tasks',
-    component: TasksPage
+    component: TasksPage,
+    meta: {
+      auth: true
+    }
   },
   {
     path: '/:pathMatch(.*)*',

@@ -20,9 +20,9 @@ import { NavigationMenu, NavigationMenuLink, NavigationMenuList } from '@/compon
         </div>
 
         <div class="flex gap-4">
-          <Button @click="$router.push({ name: 'login' })" variant="outline"> Login </Button>
-          <Button @click="$router.push({ name: 'register' })"> Register </Button>
-          <Button variant="outline"> Logout </Button>
+          <Button v-if="!$route.meta.auth" @click="$router.push({ name: 'login' })" variant="outline"> Login </Button>
+          <Button v-if="!$route.meta.auth" @click="$router.push({ name: 'register' })"> Register </Button>
+          <Button v-if="$route.meta.auth" variant="outline"> Logout </Button>
         </div>
       </NavigationMenuList>
     </div>
