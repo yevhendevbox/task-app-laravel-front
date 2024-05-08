@@ -9,7 +9,11 @@ export const useAuthStore = defineStore('authStore', () => {
   const isLoggedIn = computed(() => !!user.value);
 
   async function fetchUser() {
-    user.value = (await getUser()).data.data;
+    try {
+      user.value = (await getUser()).data.data;
+    } catch (error) {
+      user.value = null;
+    }
   }
 
   async function handleLogin(credentials) {

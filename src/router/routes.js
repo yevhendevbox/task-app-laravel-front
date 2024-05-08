@@ -14,22 +14,34 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: LoginPage
+    component: LoginPage,
+    meta: {
+      guest: true
+    }
   },
   {
     path: '/register',
     name: 'register',
-    component: RegisterPage
+    component: RegisterPage,
+    meta: {
+      guest: true
+    }
   },
   {
     path: '/summary',
     name: 'summary',
-    component: SummaryPage
+    component: SummaryPage,
+    meta: {
+      auth: true
+    }
   },
   {
     path: '/tasks',
     name: 'tasks',
-    component: TasksPage
+    component: TasksPage,
+    meta: {
+      auth: true
+    }
   },
   {
     path: '/:pathMatch(.*)*',

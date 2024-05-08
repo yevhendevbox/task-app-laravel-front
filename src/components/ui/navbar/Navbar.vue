@@ -1,6 +1,17 @@
 <script setup>
+import { useRouter } from 'vue-router';
+
 import { Button } from '@/components/ui/button';
 import { NavigationMenu, NavigationMenuLink, NavigationMenuList } from '@/components/ui/navigation-menu';
+import { useAuthStore } from '@/stores/auth';
+
+const router = useRouter();
+const store = useAuthStore();
+
+async function logout() {
+  await store.handleLogout();
+  router.push({ name: 'login' });
+}
 </script>
 
 <template>
@@ -11,18 +22,22 @@ import { NavigationMenu, NavigationMenuLink, NavigationMenuList } from '@/compon
           <NavigationMenuLink class="cursor-pointer text-xl">
             <RouterLink :to="{ name: 'home' }">Todo List App</RouterLink>
           </NavigationMenuLink>
-          <NavigationMenuLink class="cursor-pointer">
-            <RouterLink :to="{ name: 'tasks' }">Tasks</RouterLink>
-          </NavigationMenuLink>
-          <NavigationMenuLink class="cursor-pointer">
-            <RouterLink :to="{ name: 'summary' }">Summary</RouterLink>
-          </NavigationMenuLink>
+          <template v-if="store.isLoggedIn">
+            <NavigationMenuLink class="cursor-pointer">
+              <RouterLink :to="{ name: 'tasks' }">Tasks</RouterLink>
+            </NavigationMenuLink>
+            <NavigationMenuLink class="cursor-pointer">
+              <RouterLink :to="{ name: 'summary' }">Summary</RouterLink>
+            </NavigationMenuLink>
+          </template>
         </div>
 
         <div class="flex gap-4">
-          <Button @click="$router.push({ name: 'login' })" variant="outline"> Login </Button>
-          <Button @click="$router.push({ name: 'register' })"> Register </Button>
-          <Button variant="outline"> Logout </Button>
+          <template v-if="!store.isLoggedIn">
+            <Button @click="$router.push({ name: 'login' })" variant="outline"> Login </Button>
+            <Button @click="$router.push({ name: 'register' })"> Register </Button>
+          </template>
+          <Button v-else @click.prevent="logout" variant="outline"> Logout </Button>
         </div>
       </NavigationMenuList>
     </div>
