@@ -2,6 +2,12 @@
 import { useRouter } from 'vue-router';
 
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
 import { NavigationMenu, NavigationMenuLink, NavigationMenuList } from '@/components/ui/navigation-menu';
 import { useAuthStore } from '@/stores/auth';
 
@@ -37,7 +43,13 @@ async function logout() {
             <Button @click="$router.push({ name: 'login' })" variant="outline"> Login </Button>
             <Button @click="$router.push({ name: 'register' })"> Register </Button>
           </template>
-          <Button v-else @click.prevent="logout" variant="outline"> Logout </Button>
+
+          <DropdownMenu v-else>
+            <DropdownMenuTrigger>{{ store.user?.name }}</DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem @click.prevent="logout">Logout</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </NavigationMenuList>
     </div>
